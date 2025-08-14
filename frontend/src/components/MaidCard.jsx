@@ -1,6 +1,6 @@
 import React from "react";
 
-const MaidCard = ({ maid, index }) => {
+const MaidCard = ({ maid,isBooked, index ,onBookClick}) => {
   // Helper to get rate
   const getRateLabel = () => {
     if (!maid.rates) return "₹N/A";
@@ -105,8 +105,8 @@ const MaidCard = ({ maid, index }) => {
         </div>
 
         <div className="mt-4 flex justify-between items-center">
-          <button className="bg-blue-500 hover:bg-[#2596be] text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-            View Profile
+          <button className="bg-blue-500 hover:bg-[#2596be] text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out" onClick={() => {console.log("book now clicked!"),onBookClick(maid)}}>
+           Book Now
           </button>
         </div>
       </div>

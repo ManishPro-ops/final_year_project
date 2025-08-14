@@ -7,10 +7,11 @@ import store from "./store";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import Login from "./pages/login";
 import Services from "./pages/Services";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import RegisterMaid from './pages/RegisterPortal.jsx'
+import Signup from './pages/signup.jsx'
+import Login from './pages/Login.jsx'
 
 
 
@@ -23,6 +24,7 @@ const router=createBrowserRouter([
       {path:"/contact",element:<Contact/>},
       {path:"/about",element:<About/>},
       {path:"/login",element:<Login/>},
+      {path:"/signup",element:<Signup/>},
       {path:"/services",element:<Services/>},
       {path:"/register",element:<RegisterMaid/>},
     ]
