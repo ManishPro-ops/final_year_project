@@ -58,7 +58,7 @@ const RegisterMaid = () => {
     };
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URl}/api/maids/add`, data);
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/maids/add`, data);
       alert(res.data.message || 'Registered successfully');
     } catch (err) {
       alert(err.response?.data?.message || 'Registration failed');
