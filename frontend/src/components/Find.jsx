@@ -23,7 +23,7 @@ const Find = () => {
     query.append("availability", availability);
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/maids/search?${query.toString()}`);
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URl}/api/maids/search?${query.toString()}`);
 
     console.log("🔍 Search API response:", res.data);
 

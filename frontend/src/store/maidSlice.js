@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Thunk to fetch maids
 export const fetchMaids = createAsyncThunk("maids/fetchMaids", async () => {
-  const response = await axios.get("http://localhost:8000/api/maids");
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND_URl}/api/maids`);
   return response.data;
 });
 

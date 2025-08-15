@@ -20,7 +20,7 @@ function Login() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URl}/api/auth/login`, {
         email,
         password,
       });
