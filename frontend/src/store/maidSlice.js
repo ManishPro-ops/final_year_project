@@ -3,10 +3,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Thunk to fetch maids
-export const fetchMaids = createAsyncThunk("maids/fetchMaids", async () => {
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/maids`);
-  return response.data;
-});
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+if (!backendUrl) {
+  console.error("VITE_BACKEND_URL is not defined in your .env file!");
+}
+
+export const fetchMaids = createAsyncThunk(
+  "maids/fetchMaids",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/maids`);
+      return response.data;
+    } catch (err) {
+      console.error("Failed to fetch maids:", err);
+      // Pass backend error message or generic message to rejected action
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
 
 const maidSlice = createSlice({
   name: "maids",
@@ -32,20 +46,23 @@ const maidSlice = createSlice({
 
       state.data = maids;
       state.status = "succeeded";
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMaids.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(fetchMaids.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.error = null;
       })
       .addCase(fetchMaids.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       });
   },
 });

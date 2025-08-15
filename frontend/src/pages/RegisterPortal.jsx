@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
 
+const backendUrl=import.meta.env.VITE_BACKEND_URL;
 const RegisterMaid = () => {
   const nameRef = useRef();
   const ageRef = useRef();
@@ -58,7 +59,7 @@ const RegisterMaid = () => {
     };
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/maids/add`, data);
+      const res = await axios.post(`${backendUrl}/api/maids/add`, data);
       alert(res.data.message || 'Registered successfully');
     } catch (err) {
       alert(err.response?.data?.message || 'Registration failed');

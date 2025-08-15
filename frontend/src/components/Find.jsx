@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setMaids } from "../store/maidSlice";
 
+const backendUrl=import.meta.env.VITE_BACKEND_URL;
 const Find = () => {
   const dispatch = useDispatch();
   const locationRef = useRef();
@@ -23,7 +24,7 @@ const Find = () => {
     query.append("availability", availability);
 
   try {
-    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/maids/search?${query.toString()}`);
+    const res = await axios.get(`${backendUrl}/api/maids/search?${query.toString()}`);
 
     console.log("🔍 Search API response:", res.data);
 

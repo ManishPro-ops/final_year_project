@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,16 +20,27 @@ function Login() {
       return;
     }
 
+    if (!backendUrl) {
+      setError("Backend URL is not defined. Check your .env file.");
+      return;
+    }
+
     setLoading(true);
+    setError(""); // clear previous errors
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
+      const response = await axios.post(`${backendUrl}/api/auth/login`, {
         email,
         password,
       });
 
-      localStorage.setItem("token", response.data.token);
-      alert("✅ Login successful!");
-      navigate("/");
+      if (response.data?.token) {
+        localStorage.setItem("token", response.data.token);
+        alert("✅ Login successful!");
+        navigate("/"); // redirect to homepage
+      } else {
+        setError("Login failed: Invalid response from server.");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
@@ -77,7 +90,7 @@ function Login() {
           </Link>
         </div>
 
-        {/* Social login buttons */}
+        {/* Optional: Social login buttons */}
         <div className="mt-6 space-y-3">
           <button className="w-full flex items-center justify-center gap-2 border p-3 rounded-lg hover:bg-gray-100 transition">
             <span className="text-blue-600 font-semibold">Login with Facebook</span>

@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function Signup() {
   const [email, setEmail] = useState("");
   const [createPassword, setCreatePassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -14,6 +15,8 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setError(""); // clear previous error
 
     if (!email || !createPassword || !confirmPassword) {
       setError("All fields are required!");
@@ -24,19 +27,28 @@ function Signup() {
       return;
     }
 
+    if (!backendUrl) {
+      setError("Backend URL is not defined. Check your .env file.");
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/signup`, {
+      const response = await axios.post(`${backendUrl}/api/auth/signup`, {
         email,
         password: createPassword,
       });
 
-      alert("✅ Signup successful!");
-      setEmail("");
-      setCreatePassword("");
-      setConfirmPassword("");
-      setError("");
-      navigate("/login");
+      if (response.data?.token || response.data?.message) {
+        alert("✅ Signup successful!");
+        setEmail("");
+        setCreatePassword("");
+        setConfirmPassword("");
+        navigate("/login");
+      } else {
+        setError("Signup failed: Invalid response from server.");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed. Please try again.");
     } finally {
@@ -94,7 +106,7 @@ function Signup() {
           </Link>
         </div>
 
-        {/* Social login buttons */}
+        {/* Optional: Social login buttons */}
         <div className="mt-6 space-y-3">
           <button className="w-full flex items-center justify-center gap-2 border p-3 rounded-lg hover:bg-gray-100 transition">
             <span className="text-blue-600 font-semibold">Login with Facebook</span>

@@ -4,6 +4,8 @@ import { fetchMaids, toggleShowAll } from "../store/maidSlice";
 import MaidCard from "./MaidCard";
 import BookingModal from "./BookingModal";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const MaidList = () => {
   const dispatch = useDispatch();
   const { data: maids, status, showAll, error } = useSelector(
@@ -25,7 +27,7 @@ const MaidList = () => {
     maids.forEach(async (maid) => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/bookings/maid/${maid._id}`
+          `${backendUrl}/api/bookings/maid/${maid._id}`
         );
         const data = await res.json(); // array of bookings [{ timeSlot, dayType }]
         setBookedSlots((prev) => ({ ...prev, [maid._id]: data }));
@@ -48,7 +50,7 @@ const MaidList = () => {
   // Booking handler
   const handleBook = async ({ maidId, timeSlot, dayType, price }) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/bookings`, {
+      const res = await fetch(`${backendUrl}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ maidId, timeSlot, dayType, price }),
